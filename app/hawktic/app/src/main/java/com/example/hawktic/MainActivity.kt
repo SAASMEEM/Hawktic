@@ -3,44 +3,26 @@ package com.example.hawktic
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.hawktic.ui.theme.HawkticTheme
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            HawkticTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
-        }
-    }
-}
+        setContentView(R.layout.activity_main)
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        val mapView = findViewById<MapView>(R.id.map)
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setBuiltInZoomControls(true)
+        mapView.setMultiTouchControls(true)
+        mapView.controller.zoomTo(15.0)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HawkticTheme {
-        Greeting("Android")
+        val marker = Marker(mapView)
+        marker.position = GeoPoint(37.7749, -122.4194)
+        mapView.overlays.add(marker)
     }
+
+
 }
