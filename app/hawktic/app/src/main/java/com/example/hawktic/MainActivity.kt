@@ -2,9 +2,9 @@ package com.example.hawktic
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
 
         val mapView = findViewById<MapView>(R.id.map)
         mapView.setTileSource(TileSourceFactory.MAPNIK)
-        mapView.setBuiltInZoomControls(true)
+        mapView.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
         mapView.setMultiTouchControls(true)
         mapView.controller.zoomTo(15.0)
 
