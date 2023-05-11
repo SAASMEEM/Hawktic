@@ -33,21 +33,31 @@ class MainActivity : ComponentActivity() {
         mapView.overlays.add(marker)
 
         val context = this
-        // Add a MyLocationNewOverlay to draw the user's location on the map
+// Add a MyLocationNewOverlay to draw the user's location on the map
         val myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mapView)
+        mapView.overlays.add(myLocationOverlay)
         myLocationOverlay.enableMyLocation()
 
-        // Create a button to center the map on the user's location
+// Create a button to center the map on the user's location
         val focusButton = findViewById<Button>(R.id.focus_button)
         focusButton.setOnClickListener {
             // Get the user's last known location
             val location = myLocationOverlay.lastFix
-
-            // If the location is not null, center the map on it
             if (location != null) {
+                // Animate the map to the user's location
                 mapView.controller.animateTo(GeoPoint(location))
+            } else {
+                // Wait for the user's location to become available
+                myLocationOverlay.runOnFirstFix(Runnable {
+                    // Animate the map to the user's location
+                    val location = myLocationOverlay.lastFix
+                    if (location != null && mapView.controller != null) {
+                        mapView.controller.animateTo(GeoPoint(location))
+                    }
+                })
             }
         }
+
 
     }
 
